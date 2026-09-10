@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dsh-research-handbook · DeepSeek Harness × 学术科研</title>
+  <title>dsh-research-handbook · Versioned Research Reproducibility Cookbook</title>
   <style>
     body { font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; max-width: 720px; margin: 60px auto; padding: 0 20px; line-height: 1.7; color: #1f2328; }
     h1 { border-bottom: 2px solid #0969da; padding-bottom: 8px; }
@@ -14,21 +14,16 @@
 </head>
 <body>
   <h1>dsh-research-handbook</h1>
-  <p><strong>DeepSeek Harness × 学术科研中文手册</strong> —— 用 dsh 做可复现的学术研究：文献调研、Stata 实证、论文图表、精选插件与 Windows 排坑。</p>
-  <div class="warn">⚠️ dsh 当前为开发者预览版（实测基线 0.1.1-rc.2），API 可能变动，以 <a href="https://github.com/deepseek-ai/deepseek-harness">官方仓库</a> 为准。</div>
-  <h2>在线阅读</h2>
+  <p><strong>Versioned Research Reproducibility Cookbook for DeepSeek Harness (DSH)</strong> —— 面向 Python / R / Stata，用版本钉死、可本地验收的 recipe 记录科研工作流。</p>
+  <div class="warn">⚠️ DSH 官方仍标记为 developer preview，并明确预期 compatibility-breaking changes。历史 handbook 章节不等于当前已验证契约。</div>
+  <h2>当前入口</h2>
   <ul>
-    <li><a href="docs/cheatsheet.md">一页速查卡</a></li>
-    <li><a href="docs/00-quickstart.md">快速上手（五分钟）</a></li>
-    <li><a href="docs/01-academic-workflow.md">学术研究工作流总览</a></li>
-    <li><a href="docs/02-literature-review.md">文献调研：CNKI 与多平台检索</a></li>
-    <li><a href="docs/03-stata-reproducible.md">Stata 可复现实证</a></li>
-    <li><a href="docs/04-figures-maps.md">论文图表</a></li>
-    <li><a href="docs/05-plugins.md">学术向精选插件</a></li>
-    <li><a href="docs/06-windows-troubleshooting.md">Windows 排坑实录</a></li>
-    <li><a href="docs/07-cost-tuning.md">缓存与成本调优</a></li>
-    <li><a href="docs/faq.md">FAQ</a></li>
+    <li><a href="docs/current-tested.md">当前实测矩阵</a></li>
+    <li><a href="recipes/dsh-v0.1.5-rc.2/python-norris-ols/README.md">Golden recipe：NIST Norris OLS</a></li>
+    <li><a href="docs/00-quickstart.md">快速上手</a></li>
+    <li><a href="docs/cheatsheet.md">一页速查</a></li>
   </ul>
-  <p><a href="https://github.com/SIMON-WORLD/dsh-research-handbook">GitHub 仓库</a> · <a href="https://github.com/SIMON-WORLD/dsh-research-handbook/blob/main/LICENSE">许可证</a></p>
+  <p>早期 <code>docs/01-*</code> 至 <code>docs/07-*</code> 与 FAQ 暂作为 legacy / unverified 素材保留，后续按 bounded mission 逐步核验。</p>
+  <p><a href="https://github.com/SIMON-WORLD/dsh-research-handbook">GitHub 仓库</a> · <a href="https://github.com/deepseek-ai/deepseek-harness">DSH upstream</a></p>
 </body>
 </html>

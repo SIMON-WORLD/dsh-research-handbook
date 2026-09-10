@@ -1,0 +1,15 @@
+{
+  "data_sha256": "2600bb421b6d0a954dd3ce221501303973434f4ce90ff2fc14bea7739a61d7d7",
+  "intercept": -0.262323073774029,
+  "n": 36,
+  "r_squared": 0.999993745883712,
+  "residual_standard_deviation": 0.884796396144373,
+  "slope": 1.00211681802045,
+  "source": "NIST StRD Norris certified values",
+  "tolerances": {
+    "intercept": 1e-12,
+    "r_squared": 1e-12,
+    "residual_standard_deviation": 1e-12,
+    "slope": 1e-12
+  }
+}
