@@ -1,51 +1,59 @@
-# 快速上手（五分钟）
+# 快速上手
 
-> 本文所有命令在 Windows 11 + dsh 0.1.1-rc.2 + Node.js 24.13.0 实测通过（2026-08-26）。
+本页只保留当前产品所需的最小入口。**先看 [`current-tested.md`](current-tested.md)**，不要默认继承章节中的旧命令仍适用于最新 DSH。
 
-## 1. 安装
+## 1. 选择一个 pinned recipe
 
-```bash
-# 需要 Node.js（推荐 22.19.x 或 24+）
-npx -y @deepseek-ai/dsh --version     # 免安装验证版本
-```
+第一条 golden recipe 固定在：
 
-> 注意：若要用 `dsh plugin` 装插件，需要额外安装 pnpm：
-> ```bash
-> npm i -g pnpm
-> ```
+- DSH tag：`dsh-v0.1.5-rc.2`
+- upstream commit：`fb2c4b9e698e30edb738bca4cf0618587db7d203`
+- recipe：[`recipes/dsh-v0.1.5-rc.2/python-norris-ols/`](../recipes/dsh-v0.1.5-rc.2/python-norris-ols/README.md)
 
-## 2. 启动 Web UI
+versioned recipe 的目标是复现一个已知契约，而不是追随 `master`。
+
+## 2. DSH 官方入口
+
+Upstream 当前文档给出的 Web 启动形式是：
 
 ```bash
 npx @deepseek-ai/dsh web
-# → http://127.0.0.1:3080
 ```
 
-启动后：
+当前 CLI 也支持 headless profile：
 
-1. **Settings → Models**：填入 DeepSeek API Key（或配置其他 Provider）；
-2. **Choose workspace**：选择项目目录；
-3. 开始第一个会话。
+```bash
+dsh --profile headless "任务"
+```
 
-## 3. 第一次任务
+为了复现本仓库 recipe，应把 npm 包版本钉死，而不是隐式使用最新版本：
 
-发给 Agent：
+```bash
+npx -y @deepseek-ai/dsh@0.1.5-rc.2 web
+```
 
-> 总结这个仓库，列出主要包。
+模型配置、workspace 选择和权限提示以 upstream 当前文档为准。
 
-Agent 可以读/写工作区文件、运行命令、委托子任务、维护计划。
+## 3. 先跑 deterministic baseline
 
-## 4. 双模式
+不依赖 DSH，也不需要网络：
 
-| 模式 | 命令 | 用途 |
-|---|---|---|
-| Web UI | `dsh web` | 交互式对话 |
-| Headless | `dsh --profile headless "任务"` | 脚本 / CI 一次性任务 |
+```bash
+cd recipes/dsh-v0.1.5-rc.2/python-norris-ols
+python analyze.py
+python verify.py
+```
 
-## 5. 推理档位
+只有 `verify.py` 返回 0，才算该统计流程通过。
 
-`off`（最快）/ `high`（默认）/ `max`（最强）。学术任务建议：简单检索用 `high`，复杂实证分析用 `max`。
+## 4. 再跑 DSH contract
+
+进入同一 recipe 目录后，按 recipe README 中的 pinned headless invocation 执行。DSH 的任务只负责在明确边界内执行工作流；最终成功判据仍由 `verify.py` 决定。
+
+## 5. 安全边界
+
+DSH 仍是 developer-preview 软件。它可以执行模型生成的命令、加载插件并访问被授予的文件、进程、网络和凭据。优先使用最小权限与可丢弃环境；第三方插件不属于本仓库默认路径。
 
 ---
 
-下一步：[学术研究工作流总览](01-academic-workflow.md)
+下一步：[当前实测矩阵](current-tested.md) · [Golden recipe](../recipes/dsh-v0.1.5-rc.2/python-norris-ols/README.md)

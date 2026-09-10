@@ -1,87 +1,66 @@
-# dsh 一页速查卡（Cheatsheet）
+# dsh-research-handbook 一页速查
 
-> 面向学术科研场景。打印 / 收藏，日常用 dsh 不用翻书。
-> 基线：Windows 11 / dsh 0.1.1-rc.2 / Node.js 24.x / pnpm 11.24.0（2026-08-26 实测）
+> 这是 **versioned reproducibility cookbook** 的速查页，不是“最新 DSH 全功能手册”。实际通过状态以 [`current-tested.md`](current-tested.md) 为准。
 
-## 安装与启动
+## 当前 recipe pin
+
+```text
+DSH tag:    dsh-v0.1.5-rc.2
+Commit:     fb2c4b9e698e30edb738bca4cf0618587db7d203
+Golden:     recipes/dsh-v0.1.5-rc.2/python-norris-ols/
+```
+
+## 官方 CLI 入口
 
 ```bash
-npx -y @deepseek-ai/dsh --version      # 免安装运行，先看版本
-npm i -g pnpm                          # dsh plugin 依赖 pnpm（必需前置）
-npx @deepseek-ai/dsh web               # Web UI → http://127.0.0.1:3080
-dsh --profile headless "任务"          # 一次性任务（脚本 / CI 友好）
-dsh --dump-config                      # 查看合成后的完整配置
+npx @deepseek-ai/dsh web
+dsh --profile headless "任务"
+dsh --dump-config
+dsh plugin --profile <name> <pnpm args>
 ```
 
-## 推理档位（性能关键：工具链任务 90% 时间在思考）
-
-| 档位 | 用途 | 备注 |
-|---|---|---|
-| `off` | 关闭思考 / 最快 | DeepSeek 官方适配器档位 |
-| `high` | 日常默认 | 官方适配器默认 |
-| `max` | 复杂推理 / 长链规划 | 官方适配器支持 |
-
-```yaml
-# ~/.dsh/settings.yaml
-agent-default-model:
-  model: deepseek-v4-flash     # 或 deepseek-v4-pro
-  reasoningEffort: high        # off / high / max
-```
-
-## 核心命令
-
-| 命令 | 用途 |
-|---|---|
-| `dsh web` | Web UI |
-| `dsh --profile headless "任务"` | 一次性任务 |
-| `dsh --dump-config` | 看合成配置 |
-| `dsh plugin --profile <n> add <pkg>` | 装插件（需 pnpm） |
-| `dsh plugin --profile <n> --help` | 插件命令帮助 |
-
-## 插件（装插件 = 运行第三方代码，先审源码）
+复现 recipe 时显式 pin npm 版本：
 
 ```bash
-dsh plugin --profile web add dshmarket   # 可视化插件市场
-dsh plugin --profile test add <pkg>      # 先在测试 profile 试装
+npx -y @deepseek-ai/dsh@0.1.5-rc.2 web
 ```
 
-安全红线：不审源码不装 / 密钥 profile 不试陌生插件 / 不放行未知构建脚本 / Git 源固定 commit。
-
-## 学术科研三连（本手册主场景）
+## Golden recipe 本地验收
 
 ```bash
-# 1) 文献调研（CNKI / 多平台）→ 用 agent-reach / cnki-* 技能
-# 2) Stata 可复现 → 用 stata-research-kit 工作流（do-file + log + 表格）
-# 3) 论文图表 → pydeck 地图 / officecli 文档 / framework-figure-studio-pro
+cd recipes/dsh-v0.1.5-rc.2/python-norris-ols
+python analyze.py
+python verify.py
 ```
 
-## 提示词黄金法则（学术场景）
+成功判据：`verify.py` 输出 `PASS` 且退出码为 `0`。
 
-1. **写验收标准**：`"运行验证通过，输出 p-value 表"` > `"分析数据"`；
-2. **给上下文**：数据文件路径、变量含义、目标期刊风格；
-3. **一次一个任务**：小闭环比巨型任务可靠（可复现性更高）。
+## DSH headless 契约
 
-## 缓存省钱（实测命中可到 97%）
+在 recipe 目录运行：
 
-- 长任务保持会话延续，别频繁新建会话；
-- prompt 前缀保持稳定，别老改配置；
-- 看 Web UI 底部「缓存命中 %」指标。
+```bash
+npx -y @deepseek-ai/dsh@0.1.5-rc.2 --profile headless \
+  "Use only local files in this workspace. Run python analyze.py, then python verify.py. Do not edit data/norris.csv, expected.json, or verify.py. The task succeeds only if verify.py exits 0. Report result.json and the verifier status."
+```
 
-## 排障速查（Windows）
+## DeepSeek adapter reasoningEffort
 
-| 现象 | 解法 |
-|---|---|
-| 端口占用 | `netstat -ano \| findstr 3080` → kill |
-| 模型无响应 | 查 settings.yaml + API key |
-| `'pnpm' is not recognized` | `npm i -g pnpm`（dsh plugin 前置） |
-| 插件装不上 404 | 依赖用 `^0.1.0-rc.6` 线 |
-| 长任务崩 | 全局安装（绕 npx）+ 降推理档 |
-| 中文路径报错 | 项目目录避免非 ASCII 路径 |
+当前 upstream DeepSeek adapter 文档列出的取值为：
 
-## 术语速记
+```text
+off | low | high | max
+```
 
-`profile` 形态 · `bundle` 插件组 · `host/client 半` 服务端/界面 · `扩展点` 官方钩子 · `waterfall` 请求链 · `compaction` 上下文压缩 · `headless` 一次性 CLI · `locations` 产物路径 · `dsh.bundle` 插件清单声明
+不要把旧 cheatsheet 中的性能/成本百分比或特定推荐档位当作已验证事实。
 
----
+## 安全与生态
 
-完整章节见 [dsh-research-handbook](https://github.com/SIMON-WORLD/dsh-research-handbook) 各 docs/ 章节。
+- DSH 是 developer preview；compatibility-breaking changes 是官方明确预期。
+- 最小权限运行，敏感凭据与不可信数据隔离。
+- official DSH primitives first。
+- 第三方插件：未单独 provenance-check，不进入 recipe 默认依赖。
+
+## 旧章节
+
+早期 `docs/01-*` 至 `docs/07-*` 与 FAQ 含规划稿和 `0.1.1-rc.2` 时期内容。除非 current-tested matrix 或某条 versioned recipe 明确覆盖，否则一律按 **legacy / unverified** 处理。
