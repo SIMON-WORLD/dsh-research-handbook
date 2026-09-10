@@ -1,6 +1,6 @@
 name: Runtime verify DSH Norris
 
-# Re-queued after repository-level DEEPSEEK_API_KEY provisioning; remove this branch-only lane before final merge.
+# Branch-only verification lane for Issue #3; remove before final merge.
 on:
   push:
     branches:
@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
       DSH_TELEMETRY_MODE: DISABLED
       NO_COLOR: "1"
     defaults:
@@ -52,6 +51,8 @@ jobs:
           npx -y @deepseek-ai/dsh@0.1.5-rc.2 --version
 
       - name: Credential gate
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           set -euo pipefail
           if [ -z "${DEEPSEEK_API_KEY:-}" ]; then
@@ -59,6 +60,7 @@ jobs:
             exit 78
           fi
           echo "DEEPSEEK_API_KEY=present (value not printed)"
+          echo "DEEPSEEK_API_KEY_length=${#DEEPSEEK_API_KEY}"
 
       - name: Record pre-run oracle hashes
         run: |
@@ -68,6 +70,7 @@ jobs:
       - name: Run pinned DSH headless contract
         timeout-minutes: 5
         env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           DSH_HOME: ${{ runner.temp }}/dsh-home
         run: |
           set -uo pipefail
