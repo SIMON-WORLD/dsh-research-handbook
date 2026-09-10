@@ -1,5 +1,6 @@
 name: Runtime verify DSH Norris
 
+# Re-queued after repository secret provisioning; remove this branch-only lane before final merge.
 on:
   push:
     branches:
