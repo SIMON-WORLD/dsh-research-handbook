@@ -1,6 +1,6 @@
 name: Runtime verify DSH Norris
 
-# Branch-only verification lane for Issue #3; second fresh run after corrected repository secret; remove before final merge.
+# Branch-only verification lane for Issue #3; fresh run after owner-confirmed 35-character repository secret; remove before final merge.
 on:
   push:
     branches:
