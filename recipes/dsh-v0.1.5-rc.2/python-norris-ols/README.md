@@ -92,7 +92,7 @@ npx -y @deepseek-ai/dsh@0.1.5-rc.2 --profile headless \
 
 The model's final prose is **not** the oracle. `verify.py` is.
 
-A live DSH runtime pass was not established in the environment that created this recipe; see [`docs/current-tested.md`](../../../docs/current-tested.md). The command above is the pinned execution contract, not a fabricated test result.
+This exact pinned DSH headless contract was verified on 2026-09-11 in a GitHub-hosted Ubuntu 24.04.5 runner: DSH exited `0`, the three protected oracle/fixture files retained identical pre/post SHA-256 values, and an independent post-DSH `python verify.py` returned `PASS` / exit `0`. Durable evidence is recorded in [Issue #3](https://github.com/SIMON-WORLD/dsh-research-handbook/issues/3) and [Actions run 34607136510](https://github.com/SIMON-WORLD/dsh-research-handbook/actions/runs/34607136510); the current-tested scope is summarized in [`docs/current-tested.md`](../../../docs/current-tested.md).
 
 ## Files
 
